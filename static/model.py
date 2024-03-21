@@ -1,6 +1,7 @@
-import pandas as pd
-import numpy as np
 import pickle
+
+import numpy as np
+import pandas as pd
 import sklearn.metrics as metrics
 
 # Setup data.
@@ -184,8 +185,7 @@ X = df[predictorVariables]
 y = df["admitted"]
 
 # Import the necessary libraries first
-from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import chi2
+from sklearn.feature_selection import SelectKBest, chi2
 
 # You imported the libraries to run the experiments. Now, let's see it in action.
 
@@ -205,8 +205,8 @@ cols = chiScores.get_support(indices=True)
 print(cols)
 features = X.columns[cols]
 print(np.array(features))
-from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 
 # Re-assign X with significant columns only after chi-square test.
 X = df[["gmat", "work_experience"]]

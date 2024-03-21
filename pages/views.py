@@ -1,8 +1,26 @@
 # pages/views.py
-from django.shortcuts import render, HttpResponseRedirect
 from django.http import Http404
+from django.shortcuts import HttpResponseRedirect, redirect, render
 from django.urls import reverse
 from django.views.generic import TemplateView
+
+from pages.models import Item, ToDoList
+
+from .forms import RegisterForm
+
+
+def register(response):
+    # Handle POST request.
+    if response.method == "POST":
+        form = RegisterForm(response.POST)
+        if form.is_valid():
+            form.save()
+
+            return redirect("../")  # Go to home page
+    # Handle GET request.
+    else:
+        form = RegisterForm()
+    return render(response, "registration/register.html", {"form": form})
 
 
 def homePageView(request):
@@ -26,6 +44,13 @@ def aboutPageView(request):
 def terencePageView(request):
     # return request object and specify page.
     return render(request, "terence.html")
+
+
+def todos(request):
+    items = Item.objects
+    itemErrandDetail = items.select_related("todolist")
+    print(itemErrandDetail[0].todolist.name)
+    return render(request, "todos.html", {"todos": itemErrandDetail})
 
 
 def homePost(request):
@@ -66,8 +91,9 @@ def homePost(request):
 
 
 import pickle
-import sklearn
+
 import pandas as pd
+import sklearn
 
 
 def results(request, choice, gmat):

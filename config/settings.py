@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-(s^9+j*ir2dq0c+@9^-mmdby$#_g^fss-^j@=#5+y!#d67kcke
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["terenceformer.pythonanywhere.com"]
 
 
 # Application definition
@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # my apps
+    # custom apps
+    "crispy_forms",
+    "crispy_bootstrap4",
     "pages.apps.PagesConfig",
 ]
 
@@ -50,6 +52,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 ROOT_URLCONF = "config.urls"
 

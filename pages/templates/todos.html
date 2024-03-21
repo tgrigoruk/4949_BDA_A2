@@ -1,0 +1,28 @@
+{% extends "base.html" %} {% block content %}
+<h1>Terence's ToDo Items page</h1>
+<table class="table table-striped">
+  <!-- table headers -->
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">List Name</th>
+      <th scope="col">List ID</th>
+      <th scope="col">Task</th>
+      <th scope="col">Item ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for todo in todos %}
+    <!-- rows of data -->
+    <tr>
+      <!-- cells -->
+      <th scope="row">{{forloop.counter}}</th>
+      <td scope="col">{{todo.todolist.name}}</td>
+      <td scope="col">{{todo.todolist.id}}</td>
+      <td scope="col">{{todo.text}}</td>
+      <td scope="col">{{todo.id}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}
