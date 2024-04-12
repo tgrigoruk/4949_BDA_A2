@@ -4,32 +4,33 @@
   <head>
     <style type="text/css">
       .sidenav {
-          height:100%;
-          width:160px;
-          position: fixed;
-          z-index:1;
-          top:0;
-          left:0;
-          background-color:#111;
-          overflow-x: :hidden;
-          padding-top:20px;
+        padding: 1em;
+        height: 100%;
+        width: 160px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        padding-top: 20px;
       }
 
-              .sidenav a {
-          padding:6px 8px 6px 16px;
-          text-decoration: none;
-          font-size:25px;
-          color: #818181;
-          display:block;
+      .sidenav a {
+        padding: 3px 8px 6px 16px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
       }
 
-              .sidenav a:hover{
-          color:#f1f1f1;
+      .sidenav a:hover {
+        color: #f1f1f1;
       }
 
-              .main{
-          margin-left:160px;
-          padding: 0px 10px;
+      .main {
+        margin-left: 160px;
+        padding: 0px 10px;
       }
     </style>
 
@@ -51,9 +52,17 @@
 
   <body>
     <div class="sidenav">
-      <a href="{% url 'home' %}">Home</a> |
-      <a href="{% url 'todos' %}">Todos</a> |
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'todos' %}">ToDos</a>
       <a href="{% url 'about' %}">About</a>
+
+      {% if user.is_authenticated %}
+      <span class="badge badge-info">{{ user.username }}</span>
+      <a href="{% url 'secret' %}">Secret!</a>
+      <a href="{% url 'logout' %}">Logout</a>
+      {% else %}
+      <a href="{% url 'login' %}">Login</a>
+      {% endif %}
     </div>
 
     <div id="content" name="content" class="main">

@@ -1,26 +1,18 @@
 # pages/views.py
+from django.contrib.auth import logout
 from django.http import Http404
 from django.shortcuts import HttpResponseRedirect, redirect, render
 from django.urls import reverse
 from django.views.generic import TemplateView
 
-from pages.models import Item, ToDoList
+from pages.models import Item
 
 from .forms import RegisterForm
 
 
-def register(response):
-    # Handle POST request.
-    if response.method == "POST":
-        form = RegisterForm(response.POST)
-        if form.is_valid():
-            form.save()
 
-            return redirect("../")  # Go to home page
-    # Handle GET request.
-    else:
-        form = RegisterForm()
-    return render(response, "registration/register.html", {"form": form})
+def message(request, msg, title):
+    return render(request, "message.html", {"msg": msg, "title": title})
 
 
 def homePageView(request):
@@ -90,13 +82,12 @@ def homePost(request):
         )
 
 
-import pickle
-
-import pandas as pd
-import sklearn
-
 
 def results(request, choice, gmat):
+    import pickle
+
+    import pandas as pd
+
     print("*** Inside reults()")
     # load saved model
     with open("../model_pkl", "rb") as f:
