@@ -1,108 +1,78 @@
-# pages/views.py
-from django.contrib.auth import logout
-from django.http import Http404
-from django.shortcuts import HttpResponseRedirect, redirect, render
+from django.shortcuts import HttpResponseRedirect, render
 from django.urls import reverse
-from django.views.generic import TemplateView
-
-from pages.models import Item
-
-from .forms import RegisterForm
+from pages.services import get_prediction
 
 
+def home(request):
+    return render(request, "home.html")
 
-def message(request, msg, title):
-    return render(request, "message.html", {"msg": msg, "title": title})
 
-
-def homePageView(request):
-    # return request object and specify page.
+def survey(request):
+    ranking_questions = [
+        "Online boarding",
+        "Inflight wifi service",
+        "Seat comfort",
+        "Inflight entertainment",
+        "Leg room service",
+        "On-board service",
+    ]
     return render(
         request,
-        "home.html",
+        "survey.html",
         {
-            "mynumbers": [i for i in range(1, 11)],
-            "firstName": "Terence",
-            "lastName": "Grigoruk",
+            "questions": ranking_questions,
+            "numbers": [i for i in range(0, 6)],
         },
     )
 
 
-def aboutPageView(request):
-    # return request object and specify page.
-    return render(request, "about.html")
-
-
-def terencePageView(request):
-    # return request object and specify page.
-    return render(request, "terence.html")
-
-
-def todos(request):
-    items = Item.objects
-    itemErrandDetail = items.select_related("todolist")
-    print(itemErrandDetail[0].todolist.name)
-    return render(request, "todos.html", {"todos": itemErrandDetail})
-
-
-def homePost(request):
-    # Create variable to store choice that is recognized through entire function.
-    choice = None
-    gmat = None
+def submit(request):
 
     try:
-        # Extract value from request object by control name.
-        currentChoice = request.POST["choice"]
-        gmatStr = request.POST["gmat"]
+        data = {
+            "Age": int(request.POST["age"]),
+            "Type of Travel": request.POST["Type of Travel"],
+            "Class": request.POST["Class"],
+            "Online boarding": int(request.POST["Online boarding"][0]),
+            "Inflight wifi service": int(request.POST["Inflight wifi service"][0]),
+            "Seat comfort": int(request.POST["Seat comfort"][0]),
+            "Inflight entertainment": int(request.POST["Inflight entertainment"][0]),
+            "Leg room service": int(request.POST["Leg room service"][0]),
+            "On-board service": int(request.POST["On-board service"][0]),
+        }
+        prediction = get_prediction(data)
 
-        # Crude debugging effort.
-        print("*** Years work experience: " + str(currentChoice))
-        choice = int(currentChoice)
-        gmat = float(gmatStr)
-
-    # Enters 'except' block if integer cannot be created.
     except:
         return render(
             request,
             "home.html",
-            {
-                "errorMessage": "*** The choice was missing please try again",
-                "mynumbers": [i for i in range(1, 11)],
-            },
+            {"errorMessage": "Bad or missing values in form - please try again."},
         )
     else:
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
         return HttpResponseRedirect(
-            reverse(
-                "results",
-                kwargs={"choice": choice, "gmat": gmat},
-            )
+            reverse("results", kwargs={"prediction": prediction})
         )
 
 
+def results(request, prediction):
+    return render(request, "results.html", {"is_satisfied": prediction == 1})
 
-def results(request, choice, gmat):
-    import pickle
 
-    import pandas as pd
+def about(request):
 
-    print("*** Inside reults()")
-    # load saved model
-    with open("../model_pkl", "rb") as f:
-        loadedModel = pickle.load(f)
-
-    # Create a single prediction.
-    singleSampleDf = pd.DataFrame(columns=["gmat", "work_experience"])
-
-    workExperience = float(choice)
-    print("*** GMAT Score: " + str(gmat))
-    print("*** Years experience: " + str(workExperience))
-    singleSampleDf = singleSampleDf._append(
-        {"gmat": gmat, "work_experience": workExperience}, ignore_index=True
+    images = [
+        "https://i.ibb.co/RvTJMbp/histogram-Class.png",
+        "https://i.ibb.co/hVNvCYk/histogram-Type-of-Travel.png",
+        "https://i.ibb.co/nmvb1xs/histogram-Age.png",
+        "https://i.ibb.co/LzKf29Y/histogram-Inflight-entertainment.png",
+        "https://i.ibb.co/0hQ9Rgg/histogram-Inflight-wifi-service.png",
+        "https://i.ibb.co/S3RGZ4K/histogram-Leg-room-service.png",
+        "https://i.ibb.co/jJjcrFT/histogram-On-board-service.png",
+        "https://i.ibb.co/HYMN4Hc/histogram-Online-boarding.png",
+        "https://i.ibb.co/r0z4VNk/histogram-Seat-comfort.png",
+    ]
+    return render(
+        request,
+        "about.html",
+        {"images": images},
     )
-
-    singlePrediction = loadedModel.predict(singleSampleDf)
-
-    print("Single prediction: " + str(singlePrediction))

@@ -1,0 +1,150 @@
+<!-- templates/survey.html -->
+{% extends "base.html" %} {% block content %}
+
+<div class="container">
+  <div class="row justify-content-center mt-3">
+    <div class="col-md-8">
+      <h1 class="text-center mb-4">Enter flight details...</h1>
+
+      <div class="card">
+        <div class="card-body">
+          <!-- This form references .... -->
+          <form action="{% url 'submit' %}" method="post">
+            {% csrf_token %}
+
+            <!-- Type of Travel -->
+            <div class="form-group mb-4">
+              <label class="text-center h5">Purpose of travel</label>
+              <div
+                class="btn-group d-flex justify-content-end w-100"
+                role="group"
+                aria-label="radio toggle button group travel type"
+              >
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="Type of Travel"
+                  id="traveltype-business"
+                  value="Business"
+                  autocomplete="off"
+                />
+                <label class="btn btn-outline-primary" for="traveltype-business"
+                  >Business</label
+                >
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="Type of Travel"
+                  id="traveltype-personel"
+                  value="Personal"
+                  autocomplete="off"
+                />
+                <label class="btn btn-outline-primary" for="traveltype-personel"
+                  >Personal</label
+                >
+              </div>
+            </div>
+
+            <!-- Flight class -->
+            <div class="form-group mb-4">
+              <label class="text-center h5">Flight class</label>
+              <div
+                class="btn-group d-flex justify-content-end w-100"
+                role="group"
+                aria-label="radio toggle button group flight class"
+              >
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="Class"
+                  id="class-business"
+                  value="Business"
+                  autocomplete="off"
+                />
+                <label class="btn btn-outline-primary" for="class-business"
+                  >Business</label
+                >
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="Class"
+                  id="class-economy"
+                  value="Eco"
+                  autocomplete="off"
+                />
+                <label class="btn btn-outline-primary" for="class-economy"
+                  >Economy</label
+                >
+              </div>
+            </div>
+
+            <!-- Age -->
+
+            <div class="form-group mb-4">
+              <div class="row">
+                <div class="col">
+                  <label for="age" class="h5">Passenger Age</label>
+                </div>
+                <div class="col">
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="age"
+                    name="age"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <hr />
+
+            <!-- List of Rated Questions -->
+
+            <h4 class="mb-4">Satisfaction rating (0 = low, 5 = high)</h4>
+
+            {% for question in questions %}
+            <div class="form-group mb-4">
+              <label class="text-center h5">{{ question }}</label>
+              <div
+                class="btn-group d-flex justify-content-end w-100"
+                role="group"
+                aria-label="radio toggle button group {{question}}"
+              >
+                {% for number in numbers %}
+                <input
+                  type="radio"
+                  class="btn-check"
+                  name="{{ question }}"
+                  id="btn-radio{{ forloop.parentloop.counter }}_{{ forloop.counter }}"
+                  value="{{ number }}"
+                  autocomplete="off"
+                />
+                <label
+                  class="btn btn-outline-primary"
+                  for="btn-radio{{ forloop.parentloop.counter }}_{{ forloop.counter }}"
+                  >{{ number }}</label
+                >
+
+                {% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+
+            <!-- Submit button is also contained in the form -->
+            <div class="input-group mb-3">
+              <button type="submit" class="btn btn-primary form-control">
+                Submit responses
+              </button>
+            </div>
+          </form>
+          <!-- End of form. -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- This error will notify the user if there are issues with the POST request -->
+{% if errorMessage %}
+<p><strong>{{errorMessage}}</strong></p>
+{% endif %} {% endblock content %}

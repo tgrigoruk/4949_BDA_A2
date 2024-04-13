@@ -1,0 +1,11 @@
+# activate venv
+source mypython/bin/activate
+
+# run server
+python manage.py runserver
+
+# create app
+python manage.py startapp pages
+
+# deactivate venv
+deactivate

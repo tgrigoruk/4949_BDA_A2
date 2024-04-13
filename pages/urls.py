@@ -1,26 +1,11 @@
-from django.urls import path, include
+from django.urls import path
 
-from .views import (
-    aboutPageView,
-    homePageView,
-    homePost,
-    logoutView,
-    message,
-    register,
-    results,
-    secretArea,
-    terencePageView,
-    todos,
-)
+from .views import home, submit, about, survey, results
 
 urlpatterns = [
-    path("", homePageView, name="home"),
-    path("about/", aboutPageView, name="about"),
-    path("terence/", terencePageView, name="terence"),
-    path("homePost/", homePost, name="homePost"),
-    path("results/<int:choice>/<str:gmat>", results, name="results"),
-    path("todos/", todos, name="todos"),
-    path("register/", register, name="register"),
-    path("message/<str:msg>/<str:title>/", message, name="message"),
-    path("", include("django.contrib.auth.urls")),
+    path("", home, name="home"),
+    path("about/", about, name="about"),
+    path("survey/", survey, name="survey"),
+    path("submit/", submit, name="submit"),
+    path("results/<int:prediction>", results, name="results"),
 ]

@@ -1,6 +1,20 @@
-<!-- templates/home.html -->
+<!-- templates/results.html -->
 {% extends "base.html" %} {% block content %}
-<h1>Results page</h1>
-You entered the following information:<br />
-Years work exerience: {{choice}}<br />
-GMAT Score: {{gmat}} Prediction: {{prediction}} {% endblock content %}
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h1 class="text-center mb-4">We predict that...</h1>
+      {% if is_satisfied %}
+      <div class="alert alert-success text-center" role="alert">
+        YES! Your flight would be satisfying 😀
+      </div>
+      {% else %}
+      <div class="alert alert-danger text-center" role="alert">
+        NOPE! Your flight would not be satisfying 😞
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

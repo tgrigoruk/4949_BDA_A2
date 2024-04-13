@@ -1,4 +1,32 @@
 <!-- templates/about.html -->
 {% extends "base.html" %} {% block content %}
-<h1>About page</h1>
+<div class="mt-5">
+  <h1>About Airline Passenger Satisfaction Predictor</h1>
+  <img
+    src="https://storage.googleapis.com/kaggle-datasets-images/522275/959195/b0e445e8d51cbbb098917a006378d829/dataset-cover.png?t=2020-02-20-16-56-51"
+    class="img-fluid"
+    alt="Airplane"
+  />
+  <p>
+    This is a simple web application that use a machine learning model to
+    predict the satisfaction of an airline passenger based on various features
+    of the flight. The model was trained on the Airline Passenger Satisfaction
+    <a
+      href="https://www.kaggle.com/datasets/teejmahal20/airline-passenger-satisfaction"
+      >dataset from Kaggle</a
+    >.
+  </p>
+  <p>
+    The model was trained using a Random Forest Classifier and achieved an
+    accuracy of 0.95. The model was then deployed using Django and is hosted on
+    PythonAnywhere.
+  </p>
+
+  <h2>Histograms for most significant features of the dataset</h2>
+
+  {% for image in images %}
+  <img src="{{ image }}" class="img-fluid" />
+  {% endfor %}
+</div>
+
 {% endblock content %}
